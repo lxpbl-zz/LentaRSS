@@ -7,6 +7,7 @@
 3. Install [wkhtmltopdf](http://wkhtmltopdf.org/), as it's needed by PDFKit. Make sure it will be accessible from PDFKit module.
 4. Run `celery -A LentaRSS beat`. It will launch a celerybeat, in order to process schedule tasks
 5. Run `celery -A LentaRSS worker -l info`
+6. Finally, run `python manage.py runserver`
 
 ## Email configuring
 
