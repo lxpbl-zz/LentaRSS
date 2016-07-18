@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <title>Новости!</title>
+</head>
+<body>
+    {% for art in arts %}
+        <h2>{{ art.title }}</h2>
+        <h3>{{ art.category.name }}; {{ art.pubdate }}</h3>
+        <p>{{ art.desc }}</p>
+        <hr>
+    {% endfor %}
+</body>
+</html>

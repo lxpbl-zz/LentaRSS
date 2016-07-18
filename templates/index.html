@@ -1,0 +1,88 @@
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Новости Лента.Ру на Ваш почтовый ящик!</title>
+    <script src="{% static 'jquery.min.js' %}"></script>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link href="{% static 'bootstrap-datepicker.css' %}" rel="stylesheet">
+    <script src="{% static 'bootstrap-datepicker.js' %}"></script>
+</head>
+<body>
+    <div class="jumbotron vertical-center">
+        <div class="container text-center">
+            <h1 style="color: white">Доставка новостей Лента.ру на дом</h1>
+            <form id="feed-form" action="javascript:void(null);" method="get">
+                {% bootstrap_form form %}
+                {% bootstrap_button button_type="submit" content="Получить интересные новости!" %}
+            </form>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p class="text-center">Новости отправлены.<br>Наслаждайтесь свежими сводками прямиком из почтового ящика!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                orientation: 'top'
+            });
+        });
+
+        $("#feed-form").submit(function (e) {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'index' %}",
+                data: $("#feed-form").serialize(),
+                success: function(data) {
+                    if (data === "OK") {
+                        $("#success-modal").modal("show");
+                    } else {
+                        var parsed = JSON.parse(data);
+                        for (var key in parsed) {
+                            var holder = $("#id_" + key);
+                            holder.val("");
+                            holder.attr("placeholder", parsed[key][0]["message"]);
+                        }
+                    }
+                }
+            });
+            e.preventDefault();
+        });
+    </script>
+
+    <style scoped>
+        html {
+            overflow: hidden;
+        }
+
+        .jumbotron {
+            background: url({% static 'img/books.jpg' %}) no-repeat center center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        form {
+            width: 500px;
+            margin: auto;
+        }
+    </style>
+</body>
+</html>
